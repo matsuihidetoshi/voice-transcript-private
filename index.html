@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Voice Translate</title>
+  </head>
+  <body>
+    <div>
+      <h1 id="transcript"></h1>
+    </div>
+  </body>
+</html>
+<script>
+  SpeechRecognition = webkitSpeechRecognition || SpeechRecognition
+  const transcriptDisplay = document.getElementById('transcript')
+  const recognition = new SpeechRecognition()
+  let index = 0
+  recognition.continuous = true
+
+  recognition.onresult = (event) => {
+    getTranslatedText(event.results[index][0].transcript).then((response) => {
+      transcriptDisplay.innerHTML = response
+    })
+    index ++
+  }
+
+  recognition.start()
+
+  const getTranslatedText = async (text) => {
+    const response = await fetch('https://9lv98wr8ml.execute-api.ap-northeast-1.amazonaws.com/v1/translate', {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text })
+    })
+    return response.json()
+  }
+</script>
