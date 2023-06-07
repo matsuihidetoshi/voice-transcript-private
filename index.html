@@ -19,7 +19,7 @@
 
   recognition.onresult = (event) => {
     getTranslatedText(event.results[index][0].transcript).then((response) => {
-      transcriptDisplay.innerHTML = response
+      transcriptDisplay.innerHTML = response.translatedText.TranslatedText
     })
     index ++
   }
